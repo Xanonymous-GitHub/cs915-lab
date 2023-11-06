@@ -12,9 +12,7 @@ ARG LEVEL
 
 WORKDIR /bof
 
-COPY --from=BUILDER /bof/server /bof/stack-${LEVEL} ./
-COPY server.c stack.c Makefile ./
-# COPY server .
-# COPY stack-${LEVEL} .
+COPY --from=BUILDER /bof/server ./
+COPY --from=BUILDER /bof/stack-${LEVEL} ./stack
 
-CMD ["tail", "-f", "/dev/null"]
+CMD ["./server"]
