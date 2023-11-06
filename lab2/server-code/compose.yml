@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  builder:
+    image: handsonsecurity/seed-ubuntu:small
+    command: tail -f /dev/null
+    volumes:
+      - .:/server-code
+    privileged: true
