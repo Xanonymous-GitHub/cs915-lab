@@ -14,17 +14,33 @@ function getDB() {
   return $conn;
 }
 
-$input_uname = $_GET['username'];
-$input_pwd = $_GET['Password'];
+function validateInput($input) {
+  return preg_replace('/[^a-zA-Z0-9_.-]/', '', $input);
+}
+
+$s_input_uname = isset($_GET['username']) ? validateInput($_GET['username']) : null;
+$input_pwd = isset($_GET['Password']) ? $_GET['Password'] : null;
 $hashed_pwd = sha1($input_pwd);
 
 // create a connection
 $conn = getDB();
 
 // do the query
-$result = $conn->query("SELECT id, name, eid, salary, ssn
-                        FROM credential
-                        WHERE name= '$input_uname' and Password= '$hashed_pwd'");
+// Prepare SQL statement with placeholders
+$stmt = $conn->prepare(
+  "SELECT id, name, eid, salary, ssn 
+  FROM credential WHERE 
+  name = ? 
+  AND Password = ?"
+);
+
+// Bind parameters to the prepared statement
+$stmt->bind_param("ss", $s_input_uname, $hashed_pwd);
+
+// Execute the prepared statement
+$stmt->execute();
+$result = $stmt->get_result();
+
 if ($result->num_rows > 0) {
   // only take the first row 
   $firstrow = $result->fetch_assoc();
@@ -34,6 +50,9 @@ if ($result->num_rows > 0) {
   $salary = $firstrow["salary"];
   $ssn    = $firstrow["ssn"];
 }
+
+// close the prepared statement
+$stmt->close();
 
 // close the sql connection
 $conn->close();
