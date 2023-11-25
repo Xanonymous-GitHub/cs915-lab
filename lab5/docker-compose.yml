@@ -2,21 +2,19 @@ version: "3"
 
 services:
   attacker:
-    image: xanonymous/kali
+    image: handsonsecurity/seed-ubuntu:large
     container_name: seed-attacker
     tty: true
     cap_add:
       - ALL
     privileged: true
-    command: tail -f /dev/null
     volumes:
       - ./volumes:/volumes
     network_mode: host
 
   host:
-    image: xanonymous/kali
+    image: handsonsecurity/seed-ubuntu:large
     container_name: host-10.9.0.5
-    command: tail -f /dev/null
     tty: true
     cap_add:
       - ALL
@@ -27,7 +25,6 @@ services:
 networks:
   net-10.9.0.0:
     name: net-10.9.0.0
-    driver: bridge
     ipam:
       config:
         - subnet: 10.9.0.0/24
