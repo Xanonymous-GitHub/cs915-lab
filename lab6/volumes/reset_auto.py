@@ -23,4 +23,4 @@ print("Filter used: {}".format(myFilter))
 print("Spoofing RESET packets from Client ({}) to Server ({})".format(client, server))
 
 # Change the iface field with the actual name on your container
-sniff(iface="br-07950545de5e", filter=myFilter, prn=spoof)
+sniff(iface="br-08cf94f2500e", filter=myFilter, prn=spoof)
